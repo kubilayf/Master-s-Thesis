@@ -1,0 +1,231 @@
+Code Listing 2.1. Size Analysis on Final Configurations After Relaxation
+1. #include <iostream>
+2. #include <cmath>
+3. #include <fstream>
+4. #include <string>
+5. #include <sstream>
+6. #include <vector>
+7.
+8. using namespace std;
+9.
+10. string intToString(int t)
+11. {
+12. std::string ch;
+13. ostringstream outs;
+14. outs << t;
+15. ch = outs.str();
+16. return ch;
+17. }
+18.
+19. void skip_lines(ifstream& ifs, unsigned n)
+20. {
+21. for (unsigned i = 0; i < n ; i++)
+22. {
+23. ifs.ignore(1000, '\n');
+24. }
+25. }
+26.
+27. struct particle
+28. {
+29. double tab[5];
+30. }
+31.
+32. ostream& operator<<(ostream& os, const particle& p)
+33. {
+34. os << p.tab[0] << ' ' << p.tab[1] << ' '
+35. << p.tab[2] << ' ' << p.tab[3] << ' '
+36. << p.tab[4] << ' ' ; 
+64
+37. return os;
+38. }
+39.
+40. int main()
+41. {
+42. ofstream PGNT_final_config_after_relax;
+43.
+44. PGNT_final_config_after_relax.open("PGNT_final_config_after_relax.txt");
+45.
+46. PGNT_final_config_after_relax << "MS " << "N "
+47. << "R_after_relax[m] "
+48. << endl;
+49. int N;
+50.
+51. for ( int PGNT_number = 1; PGNT_number < 21; PGNT_number++ )
+52. {
+53. std::string filename = intToString(PGNT_number)
+54. + "_MS_finalconfig_relaxation.lammpstrj";
+55.
+56. ifstream myfile (filename.c_str());
+57.
+58. if (!myfile)
+59. {
+60. cout << "Error, file couldn't be opened" << endl;
+61. return 1;
+62. }
+63.
+64. string line;
+65. double xlo; double xhi; double ylo; double yhi;
+66. double R_fin;
+67.
+68. while (myfile)
+69. {
+70. skip_lines(myfile, 3);
+71.
+72. if (!myfile)
+73. {
+74. break;
+75. }
+76.
+77. myfile >> N;
+78.
+79. skip_lines(myfile, 1 + 1);
+80.
+81. myfile >> xlo >> xhi ;
+82. myfile >> ylo >> yhi ;
+83.
+84. skip_lines(myfile, 2 + 1);
+85.
+86. vector<particle> particle_list(N);
+87.
+88. for (auto& p : particle_list)
+89. {
+90. myfile >> p.tab[0] >> p.tab[1] >> p.tab[2] >> p.tab[3] >> p.tab[4];
+91.
+92. R_fin = sqrt((p.tab[3]*p.tab[3])+(p.tab[4]*p.tab[4]));
+93. }
+94.
+95. skip_lines(myfile, 1);
+96. }
+97. cout << PGNT_number << " " 
+65
+98. << N << " "
+99. << R_fin*(1e-10)
+100. << endl;
+101.
+102. PGNT_final_config_after_relax
+103. << PGNT_number << " "
+104. << N << " "
+105. << R_fin*(1e-10)
+106. << endl;
+107.
+108. }
+109. return 0;
+110. }
+Code Listing 2.2. Radius Analysis on Final Configurations After Deformations
+1. #include <iostream>
+2. #include <cmath>
+3. #include <fstream>
+4. #include <string>
+5. #include <sstream>
+6. #include <vector>
+7.
+8. using namespace std;
+9.
+10. string intToString(int t)
+11. {
+12. std::string ch;
+13. ostringstream outs;
+14. outs << t;
+15. ch = outs.str();
+16. return ch;
+17. }
+18.
+19. void skip_lines(ifstream& ifs, unsigned n)
+20. {
+21. for (unsigned i = 0; i < n ; i++)
+22. {
+23. ifs.ignore(1000, '\n');
+24. }
+25. }
+26.
+27. struct particle
+28. {
+29. double tab[5];
+30. };
+31.
+32. ostream& operator<<(ostream& os, const particle& p)
+33. {
+34. os << p.tab[0] << ' ' << p.tab[1] << ' '
+35. << p.tab[2] << ' ' << p.tab[3] << ' '
+36. << p.tab[4] << ' ' ;
+37. return os;
+38. }
+39.
+40. int main()
+41. {
+42. ofstream PGNT_final_config;
+43.
+44. PGNT_final_config.open("PGNT_final_config.txt"); 
+66
+45.
+46. PGNT_final_config << "MS " << "Def " << "N "
+47. << "R_final_config[m] " << endl;
+48.
+49. int N;
+50.
+51. for ( int PGNT_number = 1; PGNT_number < 21; PGNT_number++ )
+52. {
+53. for ( int def = 0; def < 81; def++ )
+54. {
+55. std::string filename = intToString(PGNT_number)
+56. + "_MS_finalconfig_deformation_dtype1_num"
+57. + intToString(def)
+58. + ".lammps";
+59.
+60. ifstream myfile (filename.c_str());
+61.
+62. if (!myfile)
+63. {
+64. cout << "Error, file couldn't be opened" << endl;
+65. return 1;
+66. }
+67.
+68. string line;
+69. double xlo; double xhi; double ylo; double yhi;
+70. double R_fin;
+71.
+72. while (myfile)
+73. {
+74. skip_lines(myfile, 3);
+75.
+76. if (!myfile)
+77. {
+78. break;
+79. }
+80.
+81. myfile >> N;
+82.
+83. skip_lines(myfile, 1 + 1);
+84.
+85. myfile >> xlo >> xhi ;
+86. myfile >> ylo >> yhi ;
+87.
+88. skip_lines(myfile, 2 + 1);
+89.
+90. vector<particle> particle_list(N);
+91.
+92. for (auto& p : particle_list)
+93. {
+94. myfile >> p.tab[0] >> p.tab[1] >> p.tab[2] >> p.tab[3] >> p.tab[4];
+95.
+96. R_fin = sqrt((p.tab[3]*p.tab[3])+(p.tab[4]*p.tab[4]));
+97.
+98. }
+99.
+100. skip_lines(myfile, 1);
+101.
+102. }
+103. cout << PGNT_number << " " << -0.01 + (def*0.00025)
+104. << " " << N << " "
+105. << R_fin*(1e-10) 
+67
+106. << endl;
+107.
+108. PGNT_final_config << PGNT_number << " " << -0.01 + (def*0.00025)
+109. << " " << N << " "
+110. << R_fin*(1e-10)
+111. << endl;
+112. }
+113. }
+114. return 0;
+115. } 
