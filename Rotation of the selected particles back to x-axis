@@ -1,0 +1,49 @@
+int number_of_atoms_cut_rotated_system;
+2. vec3d *coords_cut_rotated_system;
+3. number_of_atoms_cut_rotated_system = number_of_atoms_cut_system;
+4. coords_cut_rotated_system = new vec3d [number_of_atoms_cut_rotated_system];
+5.
+6. outFile.open("3rot.xyz");
+7. outFile << "pentagraphene structure \n" <<endl;
+8. outFile << number_of_atoms_cut_rotated_system-1 << " atoms" <<endl;
+9. outFile << "3 atom types" <<endl;
+10. outFile << "0 "<< a*sqrt(m*m+n*n) << " xlo xhi" <<endl;
+11. outFile << "0 "<< a*sqrt(m*m+n*n) << " ylo yhi" <<endl;
+12. outFile << "-5 5 zlo zhi \n" <<endl;
+13. outFile << "Atoms \n" <<endl;
+14.
+15. for (int i = 1; i < number_of_atoms_cut_system; i++)
+16. {
+17. coords_cut_rotated_system[i].x = coords_cut_system[i].x*(m/sqrt(m*m+n*n))
+18. +coords_cut_system[i].y*(n/sqrt(m*m+n*n));
+19.
+20. coords_cut_rotated_system[i].y = -coords_cut_system[i].x*(n/sqrt(m*m+n*n))
+21. +coords_cut_system[i].y*(m/sqrt(m*m+n*n));
+22.
+23. coords_cut_rotated_system[i].z = coords_cut_system[i].z;
+24.
+25. if (coords_cut_rotated_system[i].z == 0.0)
+26. {
+27. outFile << i << " 1 " << coords_cut_rotated_system[i].x
+28. << " " << coords_cut_rotated_system[i].y
+29. << " " << coords_cut_rotated_system[i].z
+30. << endl;
+31. }
+32. else if(coords_cut_rotated_system[i].z == -0.6)
+33. {
+34. outFile << i << " 2 " << coords_cut_rotated_system[i].x
+35. << " " << coords_cut_rotated_system[i].y
+36. << " " << coords_cut_rotated_system[i].z
+37. << endl;
+38. }
+39. else
+40. {
+41. outFile << i << " 3 " << coords_cut_rotated_system[i].x
+42. << " " << coords_cut_rotated_system[i].y
+43. << " " << coords_cut_rotated_system[i].z 
+61
+44. << endl;
+45. }
+46. }
+47.
+48. outFile.close();
