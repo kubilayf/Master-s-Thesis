@@ -1,0 +1,438 @@
+Code Listing 1.1. Generation of 2D PG Sheet
+1. #include <iostream>
+2. #include <cmath>
+3. #include <fstream>
+4.
+5. using namespace std;
+6.
+7. typedef struct
+8. {
+9. double x, y, z;
+10. }
+11.
+12. vec3d;
+13.
+14. int main()
+15. {
+16. int number_of_atoms_unit_cell;
+17. vec3d *coords_unit_cell;
+18.
+19. number_of_atoms_unit_cell = 6;
+20. coords_unit_cell = new vec3d [number_of_atoms_unit_cell];
+21.
+22. coords_unit_cell[0].x = 0.0;
+23. coords_unit_cell[0].y = 0.0;
+24. coords_unit_cell[0].z = 0.0;
+25. coords_unit_cell[1].x = 1.82;
+26. coords_unit_cell[1].y = 1.82;
+27. coords_unit_cell[1].z = 0.0;
+28. coords_unit_cell[2].x = 1.3468;
+29. coords_unit_cell[2].y = 0.4732;
+30. coords_unit_cell[2].z = -0.6;
+31. coords_unit_cell[3].x = 2.2932;
+32. coords_unit_cell[3].y = 3.1668;
+33. coords_unit_cell[3].z = -0.6;
+34. coords_unit_cell[4].x = 3.1668;
+35. coords_unit_cell[4].y = 1.3468;
+36. coords_unit_cell[4].z = 0.6;
+37. coords_unit_cell[5].x = 0.4732;
+38. coords_unit_cell[5].y = 2.2932;
+39. coords_unit_cell[5].z = 0.6;
+40.
+41. double a = 3.64;
+42. int m;
+43. int n;
+44.
+45. cout << "Chiral index m: ";
+46. cin >> m;
+47.
+48. cout << "Chiral index n: ";
+49. cin >> n;
+50.
+51. int min_rep_x = -n-2;
+52. int max_rep_x = m+2;
+53. int min_rep_y = -2;
+54. int max_rep_y = n+2;
+55.
+56. int number_of_atoms_init_system; 
+57
+57. vec3d *coords_init_system;
+58.
+59. number_of_atoms_init_system = 6*(n+m+4)*(n+4);
+60. coords_init_system = new vec3d [number_of_atoms_init_system];
+61.
+62. ofstream outFile;
+63. outFile.open("1flat.xyz");
+64. outFile << "pentagraphene structure \n" <<endl;
+65. outFile << number_of_atoms_init_system <<" atoms" <<endl;
+66. outFile << "3 atom types" <<endl;
+67. outFile << (-n-2)*a <<" " << (m+2)*a<<" xlo xhi" <<endl;
+68. outFile << -2*a <<" " << (n+2)*a << " ylo yhi" <<endl;
+69. outFile << "-5 5 zlo zhi \n" <<endl;
+70. outFile << "Atoms \n" <<endl;
+71.
+72. number_of_atoms_init_system = 1;
+73.
+74. for (int i = min_rep_x; i < max_rep_x; i++)
+75. for (int j = min_rep_y; j < max_rep_y; j++)
+76. {
+77. coords_init_system[number_of_atoms_init_system].x
+78. = coords_unit_cell[0].x + (a*i);
+79.
+80. coords_init_system[number_of_atoms_init_system].y
+81. = coords_unit_cell[0].y + (a*j);
+82.
+83. coords_init_system[number_of_atoms_init_system].z
+84. = coords_unit_cell[0].z;
+85.
+86. outFile << number_of_atoms_init_system
+87. << " 1 " << coords_init_system[number_of_atoms_init_system].x
+88. << " " << coords_init_system[number_of_atoms_init_system].y
+89. << " " << coords_init_system[number_of_atoms_init_system].z
+90. << endl;
+91.
+92. number_of_atoms_init_system++;
+93.
+94. coords_init_system[number_of_atoms_init_system].x
+95. = coords_unit_cell[1].x + (a*i);
+96.
+97. coords_init_system[number_of_atoms_init_system].y
+98. = coords_unit_cell[1].y + (a*j);
+99.
+100. coords_init_system[number_of_atoms_init_system].z
+101. = coords_unit_cell[1].z;
+102.
+103. outFile << number_of_atoms_init_system
+104. << " 1 " << coords_init_system[number_of_atoms_init_system].x
+105. << " " << coords_init_system[number_of_atoms_init_system].y
+106. << " " << coords_init_system[number_of_atoms_init_system].z
+107. << endl;
+108.
+109. number_of_atoms_init_system++;
+110.
+111. coords_init_system[number_of_atoms_init_system].x
+112. = coords_unit_cell[2].x + (a*i);
+113.
+114. coords_init_system[number_of_atoms_init_system].y
+115. = coords_unit_cell[2].y + (a*j);
+116.
+117. coords_init_system[number_of_atoms_init_system].z 
+58
+118. = coords_unit_cell[2].z;
+119.
+120. outFile << number_of_atoms_init_system
+121. << " 2 " << coords_init_system[number_of_atoms_init_system].x
+122. << " " << coords_init_system[number_of_atoms_init_system].y
+123. << " " << coords_init_system[number_of_atoms_init_system].z
+124. << endl;
+125.
+126. number_of_atoms_init_system++;
+127.
+128. coords_init_system[number_of_atoms_init_system].x
+129. = coords_unit_cell[3].x + (a*i);
+130.
+131. coords_init_system[number_of_atoms_init_system].y
+132. = coords_unit_cell[3].y + (a*j);
+133.
+134. coords_init_system[number_of_atoms_init_system].z
+135. = coords_unit_cell[3].z;
+136.
+137. outFile << number_of_atoms_init_system
+138. << " 2 " << coords_init_system[number_of_atoms_init_system].x
+139. << " " << coords_init_system[number_of_atoms_init_system].y
+140. << " " << coords_init_system[number_of_atoms_init_system].z
+141. << endl;
+142.
+143. number_of_atoms_init_system++;
+144.
+145. coords_init_system[number_of_atoms_init_system].x
+146. = coords_unit_cell[4].x + (a*i);
+147.
+148. coords_init_system[number_of_atoms_init_system].y
+149. = coords_unit_cell[4].y + (a*j);
+150.
+151. coords_init_system[number_of_atoms_init_system].z
+152. = coords_unit_cell[4].z;
+153.
+154. outFile << number_of_atoms_init_system
+155. << " 3 " << coords_init_system[number_of_atoms_init_system].x
+156. << " " << coords_init_system[number_of_atoms_init_system].y
+157. << " " << coords_init_system[number_of_atoms_init_system].z
+158. << endl;
+159.
+160. number_of_atoms_init_system++;
+161.
+162. coords_init_system[number_of_atoms_init_system].x
+163. = coords_unit_cell[5].x + (a*i);
+164.
+165. coords_init_system[number_of_atoms_init_system].y
+166. = coords_unit_cell[5].y + (a*j);
+167.
+168. coords_init_system[number_of_atoms_init_system].z
+169. = coords_unit_cell[5].z;
+170.
+171. outFile << number_of_atoms_init_system
+172. << " 3 " << coords_init_system[number_of_atoms_init_system].x
+173. << " " << coords_init_system[number_of_atoms_init_system].y
+174. << " " << coords_init_system[number_of_atoms_init_system].z
+175. << endl;
+176.
+177. number_of_atoms_init_system++;
+178. } 
+59
+179.
+180. outFile.close();
+Code Listing 1.2. Selection of atoms with chiral vector
+1. int number_of_atoms_cut_system;
+2. vec3d *coords_cut_system;
+3. number_of_atoms_cut_system = number_of_atoms_init_system;
+4. coords_cut_system = new vec3d [number_of_atoms_cut_system];
+5. number_of_atoms_cut_system = 1;
+6.
+7. double r_x;
+8. double r_y;
+9. double e = 1.0e-6;
+10.
+11. for (int k = number_of_atoms_cut_system ; k < number_of_atoms_init_system; k++)
+
+12. {
+13. double r_x =(coords_init_system[k].x*a*m+coords_init_system[k].y*a*n)
+14. /((a*m)*(a*m)+(a*n)*(a*n));
+15.
+16. double r_y =(coords_init_system[k].x*a*(-n)+coords_init_system[k].y*a*m)
+17. /((a*m)*(a*m)+(a*n)*(a*n));
+18.
+19. if (r_x >= 0-e && r_x <1-e && 0-e <= r_y && r_y <1-e )
+20. {
+21. coords_cut_system[number_of_atoms_cut_system].x = coords_init_system[k].x;
+22. coords_cut_system[number_of_atoms_cut_system].y = coords_init_system[k].y;
+23. coords_cut_system[number_of_atoms_cut_system].z = coords_init_system[k].z;
+24.
+25. number_of_atoms_cut_system++;
+26. }
+27. }
+28. outFile.open("2cut.xyz");
+29. outFile << "pentagraphene structure \n" <<endl;
+30. outFile << number_of_atoms_cut_system-1 << " atoms" <<endl;
+31. outFile << "3 atom types" <<endl;
+32. outFile << (-n)*a <<" " << m*a<<" xlo xhi" <<endl;
+33. outFile << "0 " << sqrt(2.0)*sqrt(n*n+m*m)*a << " ylo yhi" <<endl;
+34. outFile << "-5 5 zlo zhi \n" <<endl;
+35. outFile << "Atoms \n" <<endl;
+36.
+37. int total_cut_system = number_of_atoms_cut_system;
+38. number_of_atoms_cut_system = 1;
+39. for (int k = 1 ; k < total_cut_system ; k++)
+40. {
+41. if (coords_cut_system[number_of_atoms_cut_system].z == 0.0)
+42. {
+43. outFile << number_of_atoms_cut_system
+44. << " 1 " << coords_cut_system[number_of_atoms_cut_system].x
+45. << " " << coords_cut_system[number_of_atoms_cut_system].y
+46. << " " << coords_cut_system[number_of_atoms_cut_system].z
+47. << endl;
+48. }
+49. else if(coords_cut_system[number_of_atoms_cut_system].z == -0.6)
+50. {
+51. outFile << number_of_atoms_cut_system
+52. << " 2 " << coords_cut_system[number_of_atoms_cut_system].x
+53. << " " << coords_cut_system[number_of_atoms_cut_system].y 
+60
+54. << " " << coords_cut_system[number_of_atoms_cut_system].z
+55. << endl;
+56. }
+57. else
+58. {
+59. outFile << number_of_atoms_cut_system
+60. << " 3 " << coords_cut_system[number_of_atoms_cut_system].x
+61. << " " << coords_cut_system[number_of_atoms_cut_system].y
+62. << " " << coords_cut_system[number_of_atoms_cut_system].z
+63. << endl;
+64. }
+65. number_of_atoms_cut_system++;
+66. }
+67. outFile.close();
+Code Listing 1.3. Rotation of the selected particles back to x-axis
+1. int number_of_atoms_cut_rotated_system;
+2. vec3d *coords_cut_rotated_system;
+3. number_of_atoms_cut_rotated_system = number_of_atoms_cut_system;
+4. coords_cut_rotated_system = new vec3d [number_of_atoms_cut_rotated_system];
+5.
+6. outFile.open("3rot.xyz");
+7. outFile << "pentagraphene structure \n" <<endl;
+8. outFile << number_of_atoms_cut_rotated_system-1 << " atoms" <<endl;
+9. outFile << "3 atom types" <<endl;
+10. outFile << "0 "<< a*sqrt(m*m+n*n) << " xlo xhi" <<endl;
+11. outFile << "0 "<< a*sqrt(m*m+n*n) << " ylo yhi" <<endl;
+12. outFile << "-5 5 zlo zhi \n" <<endl;
+13. outFile << "Atoms \n" <<endl;
+14.
+15. for (int i = 1; i < number_of_atoms_cut_system; i++)
+16. {
+17. coords_cut_rotated_system[i].x = coords_cut_system[i].x*(m/sqrt(m*m+n*n))
+18. +coords_cut_system[i].y*(n/sqrt(m*m+n*n));
+19.
+20. coords_cut_rotated_system[i].y = -coords_cut_system[i].x*(n/sqrt(m*m+n*n))
+21. +coords_cut_system[i].y*(m/sqrt(m*m+n*n));
+22.
+23. coords_cut_rotated_system[i].z = coords_cut_system[i].z;
+24.
+25. if (coords_cut_rotated_system[i].z == 0.0)
+26. {
+27. outFile << i << " 1 " << coords_cut_rotated_system[i].x
+28. << " " << coords_cut_rotated_system[i].y
+29. << " " << coords_cut_rotated_system[i].z
+30. << endl;
+31. }
+32. else if(coords_cut_rotated_system[i].z == -0.6)
+33. {
+34. outFile << i << " 2 " << coords_cut_rotated_system[i].x
+35. << " " << coords_cut_rotated_system[i].y
+36. << " " << coords_cut_rotated_system[i].z
+37. << endl;
+38. }
+39. else
+40. {
+41. outFile << i << " 3 " << coords_cut_rotated_system[i].x
+42. << " " << coords_cut_rotated_system[i].y
+43. << " " << coords_cut_rotated_system[i].z 
+61
+44. << endl;
+45. }
+46. }
+47.
+48. outFile.close();
+Code Listing 1.4. Replication of the new unitcell on +x and +y directions
+1. int x;
+2. int y;
+3.
+4. cout << "Number of repetitions in x direction: ";
+5. cin >> X;
+6.
+7. cout << "Number of repetitions in y direction: ";
+8. cin >> Y;
+9.
+10. int number_of_atoms_fs_system;
+11. vec3d *coords_fs_system;
+12. number_of_atoms_fs_system = (number_of_atoms_cut_rotated_system)*X*Y;
+13. coords_fs_system = new vec3d [number_of_atoms_fs_system];
+14.
+15. outFile.open("4rot_flat.xyz");
+16. outFile << "pentagraphene structure \n" <<endl;
+17. outFile << number_of_atoms_fs_system-x*y << " atoms" <<endl;
+18. outFile << "3 atom types" <<endl;
+19. outFile << "0 " << a*sqrt(m*m+n*n)*X << " xlo xhi" <<endl;
+20. outFile << "0 " << a*sqrt(m*m+n*n)*Y << " ylo yhi" <<endl;
+21. outFile << "-5 5 zlo zhi \n" <<endl;
+22. outFile << "Atoms \n" <<endl;
+23. number_of_atoms_fs_system = 1;
+24.
+25. for (int i = 0; i < X; i++)
+26. {
+27. for (int p = 0; p < Y; p++)
+28. {
+29. for (int k = 1; k < number_of_atoms_cut_rotated_system ; k++ )
+30. {
+31. coords_fs_system[number_of_atoms_fs_system].x
+32. = coords_cut_rotated_system[k].x+(i*a*sqrt((m*m)+(n*n)));
+33.
+34. coords_fs_system[number_of_atoms_fs_system].y
+35. = coords_cut_rotated_system[k].y+(p*a*sqrt((m*m)+(n*n)));
+36.
+37. coords_fs_system[number_of_atoms_fs_system].z
+38. =coords_cut_rotated_system[k].z;
+39.
+40. if ( coords_fs_system[k].z == 0.0)
+41. {
+42. outFile << number_of_atoms_fs_system << " 1 "
+43. << coords_fs_system[number_of_atoms_fs_system].x
+44. << " " << coords_fs_system[number_of_atoms_fs_system].y
+45. << " " << coords_fs_system[number_of_atoms_fs_system].z
+46. << endl;
+47. }
+48. else if( coords_fs_system[number_of_atoms_fs_system].z == -0.6)
+49. {
+50. outFile << number_of_atoms_fs_system << " 2 "
+51. << coords_fs_system[number_of_atoms_fs_system].x
+52. << " " << coords_fs_system[number_of_atoms_fs_system].y 
+62
+53. << " " << coords_fs_system[number_of_atoms_fs_system].z
+54. << endl;
+55. }
+56. else
+57. {
+58. outFile << number_of_atoms_fs_system << " 3 "
+59. << coords_fs_system[number_of_atoms_fs_system].x
+60. << " " << coords_fs_system[number_of_atoms_fs_system].y
+61. << " " << coords_fs_system[number_of_atoms_fs_system].z
+62. << endl;
+63. }
+64. number_of_atoms_fs_system++;
+65. }
+66. }
+67. }
+68.
+69. outFile.close();
+Code Listing 1.5. Generation of PGNTs
+1. int number_of_atoms_roll_system;
+2. vec3d *coords_roll_system;
+3. number_of_atoms_roll_system = number_of_atoms_fs_system;
+4. coords_roll_system = new vec3d [number_of_atoms_roll_system];
+5.
+6. double L = X*a*sqrt((m*m)+(n*n));
+7. double R = (Y*a*sqrt((m*m)+(n*n)))/(2*M_PI);
+8.
+9. outFile.open("Folded_CNT.xyz");
+10. outFile << "pentagraphene structure \n" <<endl;
+11. outFile << number_of_atoms_roll_system-1 << " atoms" <<endl;
+12. outFile << "3 atom types" <<endl;
+13. outFile << "0 " << L << " xlo xhi" <<endl;
+14. outFile << -R-1-a << " " << R+1+a <<" ylo yhi" <<endl;
+15. outFile << -R-1-a << " " << R+1+a << " zlo zhi \n" <<endl;
+16. outFile << "Atoms \n" <<endl;
+17. number_of_atoms_roll_system =1;
+18.
+19. for (int i = 1; i < number_of_atoms_fs_system; i++)
+20. {
+21. coords_roll_system[i].x = coords_fs_system[i].x;
+22.
+23. coords_roll_system[i].y = (coords_fs_system[i].z-R)
+24. *cos(coords_fs_system[i].y/R);
+25.
+26. coords_roll_system[i].z = (coords_fs_system[i].z-R)
+27. *sin(coords_fs_system[i].y/R);
+28.
+29.
+30. if (coords_fs_system[i].z == 0.0)
+31. {
+32. outFile << number_of_atoms_roll_system
+33. << " 1 " << coords_roll_system[i].x
+34. << " " << coords_roll_system[i].y
+35. << " " << coords_roll_system[i].z
+36. << endl;
+37. }
+38. else if(coords_fs_system[i].z == -0.6)
+39. {
+40. outFile << number_of_atoms_roll_system 
+63
+41. << " 2 " << coords_roll_system[i].x
+42. << " " << coords_roll_system[i].y
+43. << " " << coords_roll_system[i].z
+44. << endl;
+45. }
+46. else
+47. {
+48. outFile << number_of_atoms_roll_system
+49. << " 3 " << coords_roll_system[i].x
+50. << " " << coords_roll_system[i].y
+51. << " " << coords_roll_system[i].z
+52. << endl;
+53. }
+54.
+55. number_of_atoms_roll_system++;
+56. }
+57.
+58. outFile.close();
+59.
+60. return 0;
+61. } 
