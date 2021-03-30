@@ -1,0 +1,16 @@
+import pandas as pd
+import os
+
+cwd = os.path.abspath('') 
+files = os.listdir(cwd)  
+
+df_t = pd.DataFrame()
+
+for file in files:
+    if file.endswith('.xlsm'):
+        df_A = pd.read_excel(file, sheet_name = 'Raw Data')
+        df_A.dropna(subset=['Reference_Column'], inplace=True)
+        df_t = df_t.append(df_A)
+df_t.to_excel("Result.xlsx")
+
+
